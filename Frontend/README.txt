@@ -1,101 +1,61 @@
-Fitness Progress and Habit Tracker Frontend
-===========================================
+# Fitness Progress and Habit Tracker
 
-This folder contains a beginner-friendly Flask frontend for the COP4710
-database project. It connects to the existing MySQL database named my_project.
+A full-stack web application for tracking workouts, nutrition,
+sleep, and daily habits.
 
-Important
----------
-The SQL files were not changed. This frontend assumes the database, tables,
-sample data, triggers, and views already exist in MySQL Workbench.
+Built with Flask, MySQL, SQL, HTML, and CSS as part of a
+database systems project.
 
-Files used before starting the app
-----------------------------------
-Run these SQL files in MySQL Workbench first:
+## Features
 
-1. Schema.sql
-2. Project_Implementation/Queries/Project_Insert_Data.sql
-3. Project_Implementation/Views/Project_Views.sql
+- Track workouts, nutrition, sleep, and habits
+- Add, update, delete, and search records
+- Generate user progress reports
+- Filter workout and health data
+- Automatically update nutrition totals using database triggers
+- Display aggregated data using MySQL views and JOINs
 
-If your instructor expects the implementation folder versions instead, you can
-run:
+## Technologies
 
-1. Project_Implementation/Tables/Project_Tables.sql
-2. Project_Implementation/Queries/Project_Insert_Data.sql
-3. Project_Implementation/Views/Project_Views.sql
+- Python
+- Flask
+- MySQL
+- SQL
+- HTML/CSS
+- MySQL Workbench
 
-Install requirements
---------------------
-Open a terminal in this Frontend folder and run:
+## Database Features
 
-    pip install -r requirements.txt
+The database implementation includes:
 
-Update the MySQL password
--------------------------
-Open app.py and find DB_CONFIG near the top of the file.
+- Relational tables
+- Primary and foreign keys
+- JOIN queries
+- Aggregate queries
+- Views
+- Triggers
+- CRUD operations
 
-Change this line:
+## Running the Application
 
-    "password": "YOUR_PASSWORD_HERE",
+1. Clone the repository.
+2. Install dependencies:
 
-to your real MySQL root password from MySQL Workbench.
+   pip install -r Frontend/requirements.txt
 
-The database connection is:
+3. Create the MySQL database using `Schema.sql`.
+4. Import the provided SQL data and views.
+5. Configure your local MySQL credentials in `Frontend/app.py`.
+6. Run:
 
-    Host: localhost
-    User: root
-    Database: my_project
+   python Frontend/app.py
 
-Start the Flask app
--------------------
-From the Frontend folder, run:
+7. Open `http://127.0.0.1:5000` in your browser.
 
-    python app.py
+## Project Structure
 
-Then open this address in a browser:
-
-    http://127.0.0.1:5000
-
-What each page demonstrates
----------------------------
-Dashboard:
-Shows project overview, table counts, and recent workouts using a JOIN.
-
-Users:
-Displays App_User records and inserts a new user. It also includes an optional
-delete button with a cascade warning.
-
-Workouts:
-Displays workouts with user names using a JOIN. It inserts workouts, updates
-workout notes, and filters by user, exercise type, or minimum calories burned.
-
-Sleep:
-Displays sleep records with user names. It inserts sleep records and filters
-for low sleep quality scores.
-
-Nutrition:
-Displays Nutrition_Log totals and Nutrition_Each food entries. It inserts and
-deletes food entries. The Nutrition_Log totals update automatically because of
-the database triggers.
-
-Habits:
-Displays habits and habit completion records. It inserts new habits, inserts
-completion logs, and filters for completed or incomplete logs.
-
-Reports:
-Shows report-style queries with joins and aggregate functions:
-- total workout minutes and calories burned per user
-- average sleep hours and sleep quality per user
-- food category counts
-- users with no habits
-
-Views:
-Displays the existing MySQL views:
-- Workout_Summary
-- Workout_and_Sleep_Correlation
-- Gained_and_Burned_Calories
-
-Beginner notes
---------------
-Most database work happens in app.py. Each route matches one page. The HTML
-files are in templates, and the design is in static/style.css.
+Frontend/                 Flask application and user interface
+Project_Implementation/   SQL queries, tables, and views
+Schema.sql                Database schema
+ER_Diagram.pdf            Entity-relationship diagram
+Project_Report.pdf         Project documentation
