@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Workouts | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Workout + App_User JOIN</p>
+    <h1>Workouts</h1>
+    <p>Add workouts, search by user or exercise, filter by calories, and update workout notes.</p>
+</section>
+
+<section class="layout">
+    <div class="stack">
+        <form class="panel form-panel" method="post">
+            <h2>Add Workout</h2>
+            <label>User
+                <select required name="user_id">
+                    {% for user in users %}
+                    <option value="{{ user.user_id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Date<input required type="date" name="workout_date"></label>
+            <label>Exercise Type<input required name="exercise_type" maxlength="30"></label>
+            <label>Duration Minutes<input required type="number" min="1" name="duration_minutes"></label>
+            <label>Calories Burned<input type="number" min="0" name="calories_burned"></label>
+            <label>Intensity
+                <select required name="intensity_level">
+                    <option>Low</option><option>Medium</option><option>High</option>
+                </select>
+            </label>
+            <label>Notes<textarea name="notes"></textarea></label>
+            <button type="submit">Add Workout</button>
+        </form>
+
+        <form class="panel form-panel" method="get">
+            <h2>Search / Filter</h2>
+            <label>User
+                <select name="user_id">
+                    <option value="">All users</option>
+                    {% for user in users %}
+                    <option value="{{ user.user_id }}" {% if selected_user|string == user.user_id|string %}selected{% endif %}>{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Exercise Contains<input name="exercise_type" value="{{ exercise_type }}"></label>
+            <label>Calories At Least<input type="number" min="0" name="min_calories" value="{{ min_calories }}"></label>
+            <button type="submit">Apply Filter</button>
+            <a class="secondary-button" href="{{ url_for('workouts') }}">Clear</a>
+        </form>
+    </div>
+
+    <div class="panel">
+        <div class="section-title">
+            <h2>Workout Records</h2>
+            <p>Notes are updated with an UPDATE statement.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>User</th><th>Date</th><th>Exercise</th><th>Minutes</th><th>Calories</th><th>Intensity</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    {% for workout in workouts %}
+                    <tr>
+                        <td>{{ workout.workout_id }}</td>
+                        <td>{{ workout.full_name }}</td>
+                        <td>{{ workout.workout_date }}</td>
+                        <td>{{ workout.exercise_type }}</td>
+                        <td>{{ workout.duration_minutes }}</td>
+                        <td>{{ workout.calories_burned or "N/A" }}</td>
+                        <td><span class="pill">{{ workout.intensity_level }}</span></td>
+                        <td>
+                            <form class="inline-form" method="post" action="{{ url_for('update_workout_notes', workout_id=workout.workout_id) }}">
+                                <input name="notes" value="{{ workout.notes or '' }}" placeholder="Add notes">
+                                <button type="submit">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

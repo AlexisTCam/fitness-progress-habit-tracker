@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Reports | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Joins + Aggregate Functions</p>
+    <h1>Reports</h1>
+    <p>These queries summarize the database with GROUP BY, AVG, SUM, COUNT, and LEFT JOIN.</p>
+</section>
+
+<section class="report-grid">
+    <div class="panel">
+        <div class="section-title"><h2>Total Workout Minutes and Calories</h2></div>
+        <div class="table-wrap">
+            <table><thead><tr><th>User</th><th>Total Minutes</th><th>Total Calories Burned</th></tr></thead><tbody>
+                {% for row in workout_totals %}
+                <tr><td>{{ row.full_name }}</td><td>{{ row.total_minutes }}</td><td>{{ row.total_calories_burned }}</td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="section-title"><h2>Average Sleep Per User</h2></div>
+        <div class="table-wrap">
+            <table><thead><tr><th>User</th><th>Average Hours</th><th>Average Quality</th></tr></thead><tbody>
+                {% for row in sleep_averages %}
+                <tr><td>{{ row.full_name }}</td><td>{{ row.avg_sleep_hours or "N/A" }}</td><td>{{ row.avg_quality_score or "N/A" }}</td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="section-title"><h2>Food Category Counts</h2></div>
+        <div class="table-wrap">
+            <table><thead><tr><th>Category</th><th>Count</th></tr></thead><tbody>
+                {% for row in food_categories %}
+                <tr><td>{{ row.category }}</td><td>{{ row.total_per_category }}</td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="section-title"><h2>Users With No Habits</h2></div>
+        <div class="table-wrap">
+            <table><thead><tr><th>User</th><th>Email</th></tr></thead><tbody>
+                {% for row in users_without_habits %}
+                <tr><td>{{ row.full_name }}</td><td>{{ row.email }}</td></tr>
+                {% else %}
+                <tr><td colspan="2">Every user currently has at least one habit.</td></tr>
+                {% endfor %}
+            </tbody></table>
+        </div>
+    </div>
+</section>
+{% endblock %}

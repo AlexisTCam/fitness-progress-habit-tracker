@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Sleep | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Sleep_Record + App_User JOIN</p>
+    <h1>Sleep</h1>
+    <p>Add sleep records and filter for low quality scores.</p>
+</section>
+
+<section class="layout">
+    <div class="stack">
+        <form class="panel form-panel" method="post">
+            <h2>Add Sleep Record</h2>
+            <label>User
+                <select required name="user_id">
+                    {% for user in users %}
+                    <option value="{{ user.user_id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Date<input required type="date" name="sleep_date"></label>
+            <label>Duration Hours<input required type="number" min="0" name="duration_hours"></label>
+            <label>Quality Score<input required type="number" min="1" max="10" name="quality_score"></label>
+            <button type="submit">Add Sleep</button>
+        </form>
+
+        <form class="panel form-panel" method="get">
+            <h2>Low Quality Filter</h2>
+            <label>Show quality score up to<input type="number" min="1" max="10" name="max_quality" value="{{ max_quality or 5 }}"></label>
+            <button type="submit">Apply Filter</button>
+            <a class="secondary-button" href="{{ url_for('sleep') }}">Clear</a>
+        </form>
+    </div>
+
+    <div class="panel">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>User</th><th>Date</th><th>Hours</th><th>Quality</th></tr>
+                </thead>
+                <tbody>
+                    {% for record in sleep_records %}
+                    <tr>
+                        <td>{{ record.sleep_id }}</td>
+                        <td>{{ record.full_name }}</td>
+                        <td>{{ record.sleep_date }}</td>
+                        <td>{{ record.duration_hours }}</td>
+                        <td><span class="score">{{ record.quality_score }}/10</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

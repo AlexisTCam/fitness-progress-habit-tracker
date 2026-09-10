@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Nutrition | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Nutrition_Log + Nutrition_Each</p>
+    <h1>Nutrition</h1>
+    <p>Food entries demonstrate INSERT and DELETE triggers that update Nutrition_Log totals.</p>
+</section>
+
+<section class="layout">
+    <form class="panel form-panel" method="post">
+        <h2>Add Food Entry</h2>
+        <label>Nutrition Log
+            <select required name="log_id">
+                {% for log in logs %}
+                <option value="{{ log.log_id }}">#{{ log.log_id }} - {{ log.full_name }} on {{ log.log_date }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Food Item<input required name="food_item" maxlength="30"></label>
+        <label>Category
+            <select required name="category">
+                <option>Breakfast</option><option>Lunch</option><option>Dinner</option>
+                <option>Snack</option><option>Drink</option><option>Other</option>
+            </select>
+        </label>
+        <label>Calories<input type="number" min="0" name="calories" value="0"></label>
+        <label>Protein<input type="number" min="0" name="protein" value="0"></label>
+        <label>Fat<input type="number" min="0" name="fat" value="0"></label>
+        <label>Water<input type="number" min="0" step="0.1" name="water" value="0"></label>
+        <button type="submit">Add Food Entry</button>
+    </form>
+
+    <div class="stack">
+        <div class="panel">
+            <div class="section-title">
+                <h2>Nutrition Log Totals</h2>
+                <p>Totals change automatically after food entries are inserted or deleted.</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Log</th><th>User</th><th>Date</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Water</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.log_id }}</td><td>{{ log.full_name }}</td><td>{{ log.log_date }}</td>
+                            <td>{{ log.calories_total }}</td><td>{{ log.protein_total }}</td>
+                            <td>{{ log.fat_total }}</td><td>{{ log.water_total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-title">
+                <h2>Food Entries</h2>
+                <p>Deleting one entry runs the after_nutrition_delete trigger.</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Log</th><th>User</th><th>Date</th><th>Food</th><th>Category</th><th>Calories</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                        <tr>
+                            <td>{{ entry.entry_id }}</td><td>{{ entry.log_id }}</td><td>{{ entry.full_name }}</td>
+                            <td>{{ entry.log_date }}</td><td>{{ entry.food_item }}</td>
+                            <td><span class="pill">{{ entry.category }}</span></td><td>{{ entry.calories }}</td>
+                            <td>
+                                <form method="post" action="{{ url_for('delete_food_entry', entry_id=entry.entry_id) }}" onsubmit="return confirm('Delete this food entry and update totals?');">
+                                    <button class="danger" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

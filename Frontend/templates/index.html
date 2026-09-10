@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">COP4710 Database Project</p>
+        <h1>Fitness Progress and Habit Tracker</h1>
+        <p class="lead">
+            A Flask frontend connected to the existing MySQL database named
+            <strong>my_project</strong>. Use the pages below to demo inserts,
+            updates, deletes, filters, reports, joins, triggers, and views.
+        </p>
+    </div>
+    <div class="hero-panel">
+        <span class="panel-number">{{ counts.users }}</span>
+        <span>active users in the database</span>
+    </div>
+</section>
+
+<section class="stat-grid">
+    <div class="stat"><span>{{ counts.users }}</span><p>Users</p></div>
+    <div class="stat"><span>{{ counts.workouts }}</span><p>Workouts</p></div>
+    <div class="stat"><span>{{ counts.sleep_records }}</span><p>Sleep Records</p></div>
+    <div class="stat"><span>{{ counts.nutrition_logs }}</span><p>Nutrition Logs</p></div>
+    <div class="stat"><span>{{ counts.habits }}</span><p>Habits</p></div>
+    <div class="stat"><span>{{ counts.habit_logs }}</span><p>Habit Logs</p></div>
+</section>
+
+<section class="two-column">
+    <div class="panel">
+        <div class="section-title">
+            <h2>Demo Navigation</h2>
+            <p>Each page focuses on a database skill.</p>
+        </div>
+        <div class="link-grid">
+            <a href="{{ url_for('users') }}">Add and view users</a>
+            <a href="{{ url_for('workouts') }}">Filter and update workouts</a>
+            <a href="{{ url_for('sleep') }}">Add and filter sleep records</a>
+            <a href="{{ url_for('nutrition') }}">Show trigger totals</a>
+            <a href="{{ url_for('habits') }}">Track completion logs</a>
+            <a href="{{ url_for('reports') }}">Run aggregate reports</a>
+            <a href="{{ url_for('views') }}">Display database views</a>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="section-title">
+            <h2>Recent Workouts</h2>
+            <p>A quick JOIN between Workout and App_User.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>User</th><th>Date</th><th>Exercise</th><th>Minutes</th><th>Intensity</th></tr>
+                </thead>
+                <tbody>
+                    {% for workout in recent_workouts %}
+                    <tr>
+                        <td>{{ workout.full_name }}</td>
+                        <td>{{ workout.workout_date }}</td>
+                        <td>{{ workout.exercise_type }}</td>
+                        <td>{{ workout.duration_minutes }}</td>
+                        <td><span class="pill">{{ workout.intensity_level }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

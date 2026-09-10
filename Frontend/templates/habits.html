@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Habits | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Habit + Habit_Each</p>
+    <h1>Habits</h1>
+    <p>Add habits, log completions, and filter completed or incomplete records.</p>
+</section>
+
+<section class="layout">
+    <div class="stack">
+        <form class="panel form-panel" method="post">
+            <h2>Add Habit</h2>
+            <label>User
+                <select required name="user_id">
+                    {% for user in users %}
+                    <option value="{{ user.user_id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Habit Name<input required name="habit_name" maxlength="30"></label>
+            <label>Habit Type
+                <select required name="habit_type"><option>Health</option><option>Self-Care</option></select>
+            </label>
+            <label>Description<input name="habit_description" maxlength="100"></label>
+            <button type="submit">Add Habit</button>
+        </form>
+
+        <form class="panel form-panel" method="post" action="{{ url_for('add_habit_log') }}">
+            <h2>Add Completion Log</h2>
+            <label>Habit
+                <select required name="habit_id">
+                    {% for habit in habits %}
+                    <option value="{{ habit.habit_id }}">#{{ habit.habit_id }} - {{ habit.full_name }}: {{ habit.habit_name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Date<input required type="date" name="log_date"></label>
+            <label>Completed
+                <select required name="completed"><option value="1">Completed</option><option value="0">Incomplete</option></select>
+            </label>
+            <label>Notes<input name="notes" maxlength="100"></label>
+            <button type="submit">Add Log</button>
+        </form>
+
+        <form class="panel form-panel" method="get">
+            <h2>Completion Filter</h2>
+            <label>Status
+                <select name="completed">
+                    <option value="">All</option>
+                    <option value="1" {% if completed_filter == "1" %}selected{% endif %}>Completed</option>
+                    <option value="0" {% if completed_filter == "0" %}selected{% endif %}>Incomplete</option>
+                </select>
+            </label>
+            <button type="submit">Apply Filter</button>
+            <a class="secondary-button" href="{{ url_for('habits') }}">Clear</a>
+        </form>
+    </div>
+
+    <div class="stack">
+        <div class="panel">
+            <div class="section-title"><h2>Habits</h2><p>Main habit records by user.</p></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>ID</th><th>User</th><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        {% for habit in habits %}
+                        <tr>
+                            <td>{{ habit.habit_id }}</td><td>{{ habit.full_name }}</td><td>{{ habit.habit_name }}</td>
+                            <td><span class="pill">{{ habit.habit_type }}</span></td><td>{{ habit.habit_description or "" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="section-title"><h2>Completion Records</h2><p>Habit_Each rows with completed status.</p></div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>ID</th><th>User</th><th>Habit</th><th>Date</th><th>Status</th><th>Notes</th></tr></thead>
+                    <tbody>
+                        {% for log in habit_logs %}
+                        <tr>
+                            <td>{{ log.habit_log_id }}</td><td>{{ log.full_name }}</td><td>{{ log.habit_name }}</td>
+                            <td>{{ log.log_date }}</td>
+                            <td><span class="status {{ 'done' if log.completed else 'missed' }}">{{ "Completed" if log.completed else "Incomplete" }}</span></td>
+                            <td>{{ log.notes or "" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

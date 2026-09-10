@@ -1,0 +1,23 @@
+# Python generated files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables / secrets
+.env
+
+# IDE files
+.vscode/
+.idea/
+
+# Windows files
+Thumbs.db
+desktop.ini
+
+*.mp4
+
+Project_Implementation/Screenshots/

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Fitness Progress Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">FP</span>
+            <span>
+                <strong>Fitness Progress</strong>
+                <small>Habit Tracker Database Demo</small>
+            </span>
+        </a>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Dashboard</a>
+            <a href="{{ url_for('users') }}">Users</a>
+            <a href="{{ url_for('workouts') }}">Workouts</a>
+            <a href="{{ url_for('sleep') }}">Sleep</a>
+            <a href="{{ url_for('nutrition') }}">Nutrition</a>
+            <a href="{{ url_for('habits') }}">Habits</a>
+            <a href="{{ url_for('reports') }}">Reports</a>
+            <a href="{{ url_for('views') }}">Views</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        {% if database_error %}
+            <section class="notice error">
+                <strong>Database connection problem.</strong>
+                Check that MySQL is running, the database exists, and the password in app.py is correct.
+                <pre>{{ database_error }}</pre>
+            </section>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="notice {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

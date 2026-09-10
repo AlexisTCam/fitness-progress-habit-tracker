@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Users | Fitness Progress Tracker{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">App_User</p>
+    <h1>Users</h1>
+    <p>Add users and view the main parent table for the project.</p>
+</section>
+
+<section class="layout">
+    <form class="panel form-panel" method="post">
+        <h2>Add User</h2>
+        <label>First Name<input required name="first_name" maxlength="30"></label>
+        <label>Last Name<input required name="last_name" maxlength="40"></label>
+        <label>Email<input required type="email" name="email" maxlength="40"></label>
+        <button type="submit">Add User</button>
+    </form>
+
+    <div class="panel">
+        <div class="section-title">
+            <h2>All Users</h2>
+            <p>Deleting a user can cascade to workouts, sleep, nutrition, and habits.</p>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Name</th><th>Email</th><th>Date Created</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.user_id }}</td>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.date_created }}</td>
+                        <td>
+                            <form method="post" action="{{ url_for('delete_user', user_id=user.user_id) }}" onsubmit="return confirm('Delete this user? Related records may be deleted too.');">
+                                <button class="danger" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
